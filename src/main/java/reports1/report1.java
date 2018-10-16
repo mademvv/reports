@@ -61,11 +61,25 @@ public static DesiredCapabilities cp;
 	//public static void main(String[] args) throws Throwable {
 		public static void report(String timestam) throws Throwable {
 		
+			
+			
+			cp=DesiredCapabilities.internetExplorer();
+			cp.setCapability(InternetExplorerDriver.INTRODUCE_FLAKINESS_BY_IGNORING_SECURITY_DOMAINS, true);
+			System.setProperty("webdriver.ie.driver", System.getProperty("user.dir")+"//drivers//IEDriverServer.exe");
+				
+			
+			
+			
 			timestamp=timestam;
-		 cp=DesiredCapabilities.internetExplorer();
-		cp.setCapability(InternetExplorerDriver.INTRODUCE_FLAKINESS_BY_IGNORING_SECURITY_DOMAINS, true);
-		System.setProperty("webdriver.ie.driver", System.getProperty("user.dir")+"//drivers//IEDriverServer.exe");
-		
+			
+			File folder = new File(System.getProperty("user.dir")+"\\report1");
+			File[] listOfFiles = folder.listFiles();
+			for (File file : listOfFiles) {
+			    if (file.isFile()) {
+			    	
+			    	if(file.getName().indexOf(timestamp)>-1){
+			    
+		 
 		//generate timestamp
 		
 		
@@ -75,7 +89,7 @@ public static DesiredCapabilities cp;
 		
 		//BufferedReader r = new BufferedReader(new FileReader("D:\\janardhan\\workspace\\reports\\report1\\data.csv"));
 		try(
-				Reader r=Files.newBufferedReader(Paths.get(System.getProperty("user.dir")+"\\report1\\report1_data.csv"));
+				Reader r=Files.newBufferedReader(Paths.get(System.getProperty("user.dir")+"\\report1\\report1_data"+"_"+timestamp+".csv"));
 				CSVParser csvParser=new CSVParser(r,CSVFormat.DEFAULT.withFirstRecordAsHeader().withIgnoreHeaderCase().withTrim());
 		
 				){
@@ -89,7 +103,7 @@ public static DesiredCapabilities cp;
 		}
 		
 		try(
-				Reader	 r=Files.newBufferedReader(Paths.get(System.getProperty("user.dir")+"\\report1\\report1_data.csv"));
+				Reader	 r=Files.newBufferedReader(Paths.get(System.getProperty("user.dir")+"\\report1\\report1_data"+"_"+timestamp+".csv"));
 				CSVParser csvParser=new CSVParser(r,CSVFormat.DEFAULT.withFirstRecordAsHeader().withIgnoreHeaderCase().withTrim());
 				
 						){
@@ -152,7 +166,9 @@ public static DesiredCapabilities cp;
        // printMap(sortedMapDesc);
         
         create_page(sortedMapDesc);
-	
+			    	}
+			    }
+			}
              
 	}
 
@@ -249,6 +265,8 @@ public static DesiredCapabilities cp;
         WebDriver driver=new InternetExplorerDriver(cp);
         driver.get("file:///"+System.getProperty("user.dir")+"\\report1_reports\\Report1_"+timestamp+".html");
         driver.manage().window().maximize();
+        
+        JOptionPane.showMessageDialog(null, "Report 1 successfully generated.File location is "+System.getProperty("user.dir")+"\\report1_reports\\Report1_"+timestamp+".html");
         }catch(Exception w){
         	//System.out.println(w);
         	JOptionPane.showMessageDialog(null, w.getMessage());
@@ -293,4 +311,5 @@ public static DesiredCapabilities cp;
 	        return sortedMap;
 	    }
 
+			    
 }

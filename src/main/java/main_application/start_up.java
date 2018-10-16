@@ -13,6 +13,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
+import report2.report2;
 import reports1.report1;
 import combined.*;
 
@@ -34,7 +35,8 @@ public static String timestamp;
 		String[] buttonlabels={
 				"Convert Input XLSX's to CSV's",
 				//"Insert single record in to DB",
-				"Report 1"
+				"Report 1[Ascending Oder of Distributors w.r.t to PV]",
+				"Report 2[Lead Origination]"
 		};
 		
 		 margin=new Insets(20,150,20,150);
@@ -44,8 +46,10 @@ public static String timestamp;
 			b.setMargin(margin);
 			if(s.equals("Convert Input XLSX's to CSV's")){
 				b.addActionListener(new Action1());
-			}else if(s.equals("Report 1")){
+			}else if(s.equals("Report 1[Ascending Oder of Distributors w.r.t to PV]")){
 				b.addActionListener(new Action2());
+			}else if(s.equals("Report 2[Lead Origination]")){
+				b.addActionListener(new Action3());
 			}
 			gui.add(b);
 			
@@ -65,7 +69,7 @@ public static String timestamp;
 		
 			try {
 				convert_xlsx_csv x=new convert_xlsx_csv();
-				x.change();
+				x.change(timestamp);
 				JOptionPane.showMessageDialog(null, "XLSX's to CSV's conversion done successfully");
 			} catch (Throwable e1) {
 				// TODO Auto-generated catch block
@@ -85,7 +89,7 @@ public static String timestamp;
 				try {
 					report1 r=new report1();
 					r.report(timestamp);
-					JOptionPane.showMessageDialog(null, "Report 1 successfully generated");
+					//JOptionPane.showMessageDialog(null, "Report 1 successfully generated");
 				} catch (Throwable e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
@@ -98,23 +102,24 @@ public static String timestamp;
 	   }
 	
 	
-/*static class Action3 implements ActionListener{
+static class Action3 implements ActionListener{
 		
 		public void actionPerformed(ActionEvent e){
 			
 				try {
-					generate_report_1.report1();
-					JOptionPane.showMessageDialog(null, "Reported Open Successfully");
+					report2 t=new report2();
+					t.report(timestamp);
+					
 				} catch (Throwable e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 					System.out.println(e1.getMessage());
-					JOptionPane.showMessageDialog(null, "Reported Not Open.");
+					JOptionPane.showMessageDialog(null, "Report 2 was not generated");
 				}
 		
 		}
 
-	   }*/
+	   }
 	
 	
 }
