@@ -28,6 +28,7 @@ import org.openqa.selenium.remote.DesiredCapabilities;
 
 import com.opencsv.CSVReader;
 import com.opencsv.CSVWriter;
+import combined.markup;
 
 public class report3 {
 	
@@ -52,16 +53,56 @@ public class report3 {
 	public static File inputFile;
 	public static CSVWriter writer;
 	//public static List<String> c;
-	public static String goodresult="";
-	public static String badresult="";
+	
 	public static String source;
 	public static String destination;
 	//public static void main(String[] args) throws Throwable {
 		public static void report() throws Throwable {
 		//result="";
+			String	badresult="";
+			String	goodresult="";
 		source=System.getProperty("user.dir")+"\\report3\\report3_Daily_PV_Order_Numbers.csv";
 		destination=System.getProperty("user.dir")+"\\report3_reports\\report3_KPI_Daily_PV_Order_Numbers.csv";
-			 inputFile = new File(source);
+			 
+		
+		inputFile = new File(destination);
+		//System.out.println("csvBody.size()"+csvBody.size());
+		//System.out.println("csvBody.get(1)"+csvBody.get(1).length);
+		// Read existing file
+		reader = new CSVReader(new FileReader(inputFile), ',');
+		csvBody = reader.readAll();
+		for(int i=0; i<csvBody.size(); i++){
+			strArray = csvBody.get(i);
+			
+		
+			for(int j=0; j<strArray.length; j++){
+				
+				if(csvBody.get(i)[j].equals("-")){
+					csvBody.get(i)[j]="0";
+				}
+			}
+		}
+		
+		reader.close();
+
+		// Write to CSV file which is open
+		writer = new CSVWriter(new FileWriter(destination), ',');
+		writer.writeAll(csvBody);
+		writer.flush();
+		writer.close();
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		inputFile = new File(source);
 
 				// Read existing file
 				 reader = new CSVReader(new FileReader(inputFile), ',');
@@ -225,7 +266,7 @@ public class report3 {
 					int rk=1;int ek=1;
 					for(int k=0;k<dump.length;k++){
 						boolean st=false;boolean rt=false;
-						for(int i=0; i<csvBody.size(); i++){
+						for(int i=1; i<csvBody.size(); i++){
 							 strArray = csvBody.get(i);
 							//col_index=0;
 							for(int j=0; j<strArray.length; j++){
@@ -279,15 +320,23 @@ public class report3 {
 					writer.close();        
 
 
-
+					String	source=System.getProperty("user.dir")+"\\report3\\report3_Daily_PV_Order_Numbers.csv";
+					String	destination=System.getProperty("user.dir")+"\\report3_reports\\report3_KPI_Daily_PV_Order_Numbers.csv";
+						 markup.manipulation(source,destination);
 					//sub totals
+/*
+					inputFile = new File(destination);
 
+					// Read existing file
+					//reader = new CSVReader(new FileReader(inputFile), ',');
+					//csvBody = reader.readAll();
+					// strArray = csvBody.get(0);
 					inputFile = new File(destination);
 
 					// Read existing file
 					reader = new CSVReader(new FileReader(inputFile), ',');
 					csvBody = reader.readAll();
-					 strArray = csvBody.get(0);
+					 strArray = csvBody.get(1);
 					 dim_array=new String[31][strArray.length];
 
 
@@ -421,7 +470,7 @@ public class report3 {
 					reader.close();
 						
 					
-
+					 strArray = csvBody.get(1);
 					String[][] subtotal;
 					if(dim_array.length%5==0){
 						subtotal=new String[6][strArray.length];
@@ -430,18 +479,21 @@ public class report3 {
 					}
 					//String[][] subtotal=new String[7][strArray.length];
 					int sum=0,u=0,t=0;boolean et=false;
-					
+					System.out.println(dim_array[0].length);
 					int uk=0;int count=0;
-					for(int y=0;dim_array[1].length>y;y++){
+					for(int y=0;dim_array[0].length>y;y++){
 						et=false;sum=0;int sumtot=0;boolean star=false;
 						for(int e=0;dim_array.length>e;e++){
 							if(dim_array[e][y]!=null){
 							if(dim_array[e][y].isEmpty()||dim_array[e][y]==""){
 								dim_array[e][y]="0";
 							}
-							
+							if(y==1238){
+								System.out.println("hi");
+							}
 							if(e>=0 && e<=4){
-								
+								System.out.println(sumtot);
+								System.out.println(dim_array[e][y]);
 								sumtot=sumtot+Integer.parseInt(dim_array[e][y]);
 								
 								star=true;
@@ -529,19 +581,19 @@ public class report3 {
 					int sy=0;
 					for(int i=0;dim_array.length>i;i++){
 						sy=0;
-						for(int j=0;dim_array[1].length>j;j++){
+						for(int j=0;dim_array[1].length-1>j;j++){
 							if(dim_array[i][j]!=null){
 							sy=sy+Integer.parseInt(dim_array[i][j]);
 							}
 						}
 						//System.out.println("sy"+sy);
-						dim_array[i][dim_array[1].length-2]=String.valueOf(sy);
+						dim_array[i][dim_array[0].length-1]=String.valueOf(sy);
 					}
 
 
 					for(int i=0;subtotal.length>i;i++){
 						int er=0;
-						for(int j=0;subtotal[1].length>j;j++){
+						for(int j=0;subtotal[1].length-1>j;j++){
 							//System.out.print("i :"+i+"j :"+j+" "+subtotal[i][j]);
 							//System.out.print("---");
 							if(subtotal[i][j]!=null){
@@ -550,10 +602,20 @@ public class report3 {
 
 						}
 						//System.out.println("er"+er);
-						subtotal[i][subtotal[1].length-2]=String.valueOf(er);
+						subtotal[i][subtotal[0].length-1]=String.valueOf(er);
 						//System.out.println("");
 					}
 
+
+					
+for(int er=0;dim_array.length>er;er++){
+						
+						for(int tr=0;dim_array[er].length>tr;tr++){
+							System.out.print(dim_array[er][tr]);
+							System.out.print("|");
+						}
+						System.out.println();
+					}
 
 
 					int day_count=31;  
@@ -580,7 +642,7 @@ public class report3 {
 						//col_index=0;
 						int h=0;str=false;stk=false;
 					
-						for(int j=0; j<strArray.length; j++){
+						for(int j=0; j<strArray.length-1; j++){
 							stk=false;
 					 if(i==7){
 						break;
@@ -624,6 +686,16 @@ public class report3 {
 					writer.close(); 
 					
 				
+					System.out.println(subtotal.length);
+					System.out.println();
+					for(int fe=0;subtotal.length>fe;fe++){
+					
+					for(int d=0;subtotal[fe].length>d;d++){
+						System.out.print(fe+"Value"+subtotal[fe][d]+"|");
+					}
+					System.out.println();
+				}
+					
 					inputFile = new File(destination);
 					//System.out.println("csvBody.size()"+csvBody.size());
 					//System.out.println("csvBody.get(1)"+csvBody.get(1).length);
@@ -639,7 +711,7 @@ public class report3 {
 						//col_index=0;
 						int h=0;stk=false;str=false;
 					
-						for(int j=0; j<strArray.length; j++){
+						for(int j=0; j<strArray.length-1; j++){
 							stk=false;
 							if(k==32){
 								break;
@@ -684,8 +756,32 @@ public class report3 {
 					writer.flush();
 					writer.close(); 
 					
-			
-		
+					inputFile = new File(destination);
+					//System.out.println("csvBody.size()"+csvBody.size());
+					//System.out.println("csvBody.get(1)"+csvBody.get(1).length);
+					// Read existing file
+					reader = new CSVReader(new FileReader(inputFile), ',');
+					csvBody = reader.readAll();
+					for(int i=0; i<csvBody.size(); i++){
+						strArray = csvBody.get(i);
+						
+					
+						for(int j=0; j<strArray.length; j++){
+							
+							if(csvBody.get(i)[j].equals("0")){
+								csvBody.get(i)[j]="-";
+							}
+						}
+					}
+					
+					reader.close();
+
+					// Write to CSV file which is open
+					writer = new CSVWriter(new FileWriter(destination), ',');
+					writer.writeAll(csvBody);
+					writer.flush();
+					writer.close();
+		*/
 		System.out.println("completed");
 		//JOptionPane.showMessageDialog(null, goodresult+"\n"+"------------------------------------\n"+badresult);
 		//JOptionPane.showMessageDialog(null, "UnFound List:\n"+badresult+"------------------------------------\n"+"Found List:\n"+goodresult);
@@ -694,7 +790,7 @@ public class report3 {
 		te.setLineWrap(true);
 		te.setWrapStyleWord(true);
 		sc.setPreferredSize(new Dimension(500,500));
-		JOptionPane.showMessageDialog(null, sc,"KPI Daily PV Sales Report1 Status",JOptionPane.YES_NO_OPTION);
+		JOptionPane.showMessageDialog(null, sc,"KPI Daily PV Sales Report3 Status",JOptionPane.YES_NO_OPTION);
 					}else{
 						JOptionPane.showMessageDialog(null, "Please enter the date.For example: For 31st Oct need to enter date as 31.");
 					}
@@ -792,7 +888,7 @@ public class report3 {
 			driver.get("file:///"+System.getProperty("user.dir")+"\\report1_reports\\Report1_"+timestamp+".html");
 			driver.manage().window().maximize();
 
-			JOptionPane.showMessageDialog(null, "Report 1 successfully generated.File location is "+System.getProperty("user.dir")+"\\report1_reports\\Report1_"+timestamp+".html");
+			JOptionPane.showMessageDialog(null, "Report 3 successfully generated.File location is "+System.getProperty("user.dir")+"\\report1_reports\\Report1_"+timestamp+".html");
 		}catch(Exception w){
 			//System.out.println(w);
 			JOptionPane.showMessageDialog(null, w.getMessage());

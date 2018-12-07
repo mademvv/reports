@@ -20,6 +20,8 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.TreeMap;
 
+import javax.swing.JOptionPane;
+
 import org.apache.commons.csv.CSVParser;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
@@ -73,17 +75,26 @@ public class Update_Distributor_List {
 			for(int j=0; j<strArray.length; j++){
 				if(j==0){
 					//System.out.print(strArray[j].substring(0,strArray[j].length()-2));
-					id=strArray[j].substring(0,strArray[j].length());
+					id=strArray[j].substring(0,strArray[j].length()).trim();
 				}else if(j==1){
 					//System.out.print(strArray[j]);
 					//System.out.println("j"+j);
 					String[] x=strArray[j].trim().split(",");
 					if(x.length>1){
-					String c=x[1]+" "+x[0];
-					name=c;
+						if(x[1].trim().equalsIgnoreCase("LLC") || x[1].trim().equalsIgnoreCase("INC") ){
+							String c=x[0].trim()+" "+x[1].trim();
+							name=c.toUpperCase().trim();
+						}else if(x[1].trim().equalsIgnoreCase("LLC.") || x[1].trim().equalsIgnoreCase("INC.")){
+							String c=x[0].trim()+" "+x[1].trim();
+							name=c.toUpperCase().trim();
+						}else{
+					String c=x[1].trim()+" "+x[0].trim();
+					name=c.toUpperCase().trim();
+					
+						}
 					//System.out.println("@@@ccc"+c);
 					}else{
-						name=strArray[j].trim();
+						name=strArray[j].trim().toUpperCase().trim();
 					}
 				}
 				dictionary.put(id, name);
@@ -92,17 +103,44 @@ public class Update_Distributor_List {
 		}
 		
 		
-		 Set set = dictionary.entrySet();
+		/* Set set = dictionary.entrySet();
 	      Iterator iterator = set.iterator();
 	      while(iterator.hasNext()) {
 	           Map.Entry me = (Map.Entry)iterator.next();
 	           System.out.print(me.getKey() + ": ");
 	           System.out.println(me.getValue());
-	      }
+	      }*/
 	      
 	      
 	      
 		//reading csv
+	      
+	      inputFile = new File(destination);
+			//System.out.println("csvBody.size()"+csvBody.size());
+			//System.out.println("csvBody.get(1)"+csvBody.get(1).length);
+			// Read existing file
+			reader = new CSVReader(new FileReader(inputFile), ',');
+			csvBody = reader.readAll();
+			for(int i=0; i<csvBody.size(); i++){
+				strArray = csvBody.get(i);
+				
+			
+				for(int j=0; j<strArray.length; j++){
+					
+					if(csvBody.get(i)[j].equals("-")){
+						csvBody.get(i)[j]="0";
+					}
+				}
+			}
+			
+			reader.close();
+
+			// Write to CSV file which is open
+			writer = new CSVWriter(new FileWriter(destination), ',');
+			writer.writeAll(csvBody);
+			writer.flush();
+			writer.close();
+			
 	      inputFile = new File(destination);
 			//System.out.println("csvBody.size()"+csvBody.size());
 			//System.out.println("csvBody.get(1)"+csvBody.get(1).length);
@@ -110,27 +148,27 @@ public class Update_Distributor_List {
 			reader = new CSVReader(new FileReader(inputFile), ',');
 			csvBody = reader.readAll();
 			strArray = csvBody.get(0);
-			System.out.println("csvBody.size()"+csvBody.size());
+			//System.out.println("csvBody.size()"+csvBody.size());
 			 dim_array=new String[csvBody.size()][strArray.length-1];
 			for(int i=0; i<csvBody.size(); i++){
-				 strArray = csvBody.get(i);
-				 System.out.println("strArray"+strArray.length);
+				 strArray = csvBody.get(0);
+				 //System.out.println("strArray"+strArray.length);
 				 int k=0;
-				for(int j=1; j<strArray.length; j++){
+				for(int j=1; j<strArray.length-1; j++){
 					
 					if(j>=1){
 						if(csvBody.get(i)[j]!=null){
-						System.out.println("i"+i);
-						System.out.println("j"+j);
-						System.out.println("k"+k);
-						System.out.println("csvBody.get(i)[j]"+csvBody.get(i)[j]);
+						//System.out.println("i"+i);
+						//System.out.println("j"+j);
+						//System.out.println("k"+k);
+						//System.out.println("csvBody.get(i)[j]"+csvBody.get(i)[j]);
 						
 					
 					if(csvBody.get(i)[j].isEmpty()==true){
 						dim_array[i][k]="0";
 					}else{
 						dim_array[i][k]=csvBody.get(i)[j];
-					System.out.println("dim_array[i][k]"+dim_array[i][k]);
+					//System.out.println("dim_array[i][k]"+dim_array[i][k]);
 					}
 					k=k+1;
 					}
@@ -140,14 +178,14 @@ public class Update_Distributor_List {
 			
 			reader.close();
 			
-			for(int i=0; i<dim_array.length; i++){
+			/*for(int i=0; i<dim_array.length; i++){
 				for(int j=0; j<dim_array[0].length; j++){
 					System.out.print(dim_array[i][j]);
 					//dim_array[i][j-1]=csvBody.get(i)[j];
 				}
 				System.out.println();
 			}
-			
+*/			
 			inputFile = new File(destination);
 			reader = new CSVReader(new FileReader(inputFile), ',');
 			csvBody = reader.readAll();	
@@ -155,14 +193,14 @@ public class Update_Distributor_List {
 				strArray = csvBody.get(i);
 							
 							Map<String, String> map = sortByValues(dictionary); 
-						      System.out.println("After Sorting:");
+						     // System.out.println("After Sorting:");
 						      Set set2 = map.entrySet();
 						      Iterator iterator2 = set2.iterator();
 						      j=1;String dis=",";String num=",";
 						      while(iterator2.hasNext()) {
 						           Map.Entry me2 = (Map.Entry)iterator2.next();
-						           System.out.print(me2.getKey() + ": ");
-						           System.out.println(me2.getValue());
+						         //  System.out.print(me2.getKey() + ": ");
+						         //  System.out.println(me2.getValue());
 						           csvBody.get(0)[j]=me2.getValue().toString();
 						           
 						           dis=dis+me2.getValue()+",";
@@ -255,7 +293,7 @@ public class Update_Distributor_List {
 						        writer.writeNext(data7); */
 						        
 						        String[] data8 = new String[data1.length]; 
-						        for(int y=0;data1.length>y;y++){
+						        for(int y=0;data1.length-1>y;y++){
 						        	if(y==0){
 						        		data8[0]="Sub Total";
 						        	}else{
@@ -330,7 +368,7 @@ public class Update_Distributor_List {
 						        /*String[] data13 = { "10"}; 
 						        writer.writeNext(data13); */
 						        String[] data14 = new String[data1.length]; 
-						        for(int y=0;data1.length>y;y++){
+						        for(int y=0;data1.length-1>y;y++){
 						        	if(y==0){
 						        		data14[0]="Sub Total";
 						        	}else{
@@ -406,7 +444,7 @@ public class Update_Distributor_List {
 						        writer.writeNext(data19);*/
 						        
 						        String[] data20 = new String[data1.length]; 
-						        for(int y=0;data1.length>y;y++){
+						        for(int y=0;data1.length-1>y;y++){
 						        	if(y==0){
 						        		data20[0]="Sub Total";
 						        	}else{
@@ -483,7 +521,7 @@ public class Update_Distributor_List {
 						        writer.writeNext(data25);*/
 						        
 						        String[] data26 = new String[data1.length]; 
-						        for(int y=0;data1.length>y;y++){
+						        for(int y=0;data1.length-1>y;y++){
 						        	if(y==0){
 						        		data26[0]="Sub Total";
 						        	}else{
@@ -560,7 +598,7 @@ public class Update_Distributor_List {
 						        writer.writeNext(data31);*/
 						        
 						        String[] data32 = new String[data1.length]; 
-						        for(int y=0;data1.length>y;y++){
+						        for(int y=0;data1.length-1>y;y++){
 						        	if(y==0){
 						        		data32[0]="Sub Total";
 						        	}else{
@@ -636,7 +674,7 @@ public class Update_Distributor_List {
 						        writer.writeNext(data37);*/
 						        
 						        String[] data38 = new String[data1.length]; 
-						        for(int y=0;data1.length>y;y++){
+						        for(int y=0;data1.length-1>y;y++){
 						        	if(y==0){
 						        		data38[0]="Sub Total";
 						        	}else{
@@ -661,7 +699,7 @@ public class Update_Distributor_List {
 						        /*String[] data40 = { "31"};
 						        writer.writeNext(data40);*/
 						        String[] data41 = new String[data1.length]; 
-						        for(int y=0;data1.length>y;y++){
+						        for(int y=0;data1.length-1>y;y++){
 						        	data41[y]="";
 						        	
 						        }
@@ -710,7 +748,7 @@ public class Update_Distributor_List {
 					boolean found=false;
 					if(number.isEmpty()==false ){
 						int col_index=0;int csv_col_index=0;
-						System.out.println("number "+number);
+						//System.out.println("number "+number);
 						
 						
 						for(int h=0;dim_array[1].length>h;h++){
@@ -731,10 +769,12 @@ public class Update_Distributor_List {
 						if(found==false){
 							
 							System.out.println("Date was not there in lookup excel "+number);
+							//JOptionPane.showMessageDialog(null, "Date was not there in lookup excel "+number);	
+							
 						}else{
 							
-							System.out.println("dim_array.length"+dim_array.length);
-							System.out.println("csvBody.size()"+csvBody.size());
+							//System.out.println("dim_array.length"+dim_array.length);
+							//System.out.println("csvBody.size()"+csvBody.size());
 							
 							inputFile = new File(destination);
 							reader = new CSVReader(new FileReader(inputFile), ',');
@@ -746,7 +786,7 @@ public class Update_Distributor_List {
 									
 									// if(je==col_index){
 									if(je==csv_col_index){
-										 System.out.println("dim_array[i][col_index]"+dim_array[i][col_index]);
+										 //System.out.println("dim_array[i][col_index]"+dim_array[i][col_index]);
 										 csvBody.get(i)[csv_col_index]=dim_array[i][col_index].toString();
 										// fg=true;
 										 break;
@@ -774,7 +814,7 @@ public class Update_Distributor_List {
 					
 				}
 			}
-			System.out.println("trmp");
+			//System.out.println("trmp");
 			total.tot(destination);
 			
 				/*String[][] subtotal;

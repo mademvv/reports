@@ -22,6 +22,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.swing.JOptionPane;
+
 import org.apache.commons.csv.CSVParser;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
@@ -53,14 +55,15 @@ public class creation_of_template {
 	public static String badresult="";
 	public static List<String> found;
 	public static List<String> unfound;
-	public static void main(String[] args) throws Throwable {
+	public static String  destination;
+	//public static void main(String[] args) throws Throwable {
+		
+		
+		public static void generate() throws Throwable {	
 		
 		
 		
-		
-		
-		
-		
+			 destination=System.getProperty("user.dir")+"\\combined\\template.csv";
 		
 		
 inputFile = new File(System.getProperty("user.dir")+"\\combined\\Combined_lookup.csv");
@@ -83,11 +86,19 @@ inputFile = new File(System.getProperty("user.dir")+"\\combined\\Combined_lookup
 					//System.out.println("j"+j);
 					String[] x=strArray[j].trim().split(",");
 					if(x.length>1){
+						if(x[1].trim().equalsIgnoreCase("LLC") || x[1].trim().equalsIgnoreCase("INC") ){
+							String c=x[0].trim()+" "+x[1].trim();
+							name=c.toUpperCase().trim();
+						}else if(x[1].trim().equalsIgnoreCase("LLC.") || x[1].trim().equalsIgnoreCase("INC.")){
+							String c=x[0].trim()+" "+x[1].trim();
+							name=c.toUpperCase().trim();
+						}else{
 					String c=x[1].trim()+" "+x[0].trim();
-					name=c;
-					//System.out.println("@@@ccc"+c);
+					name=c.toUpperCase().trim();
+					
+						}
 					}else{
-						name=strArray[j].trim();
+						name=strArray[j].trim().toUpperCase();
 					}
 				}
 				dictionary.put(id, name);
@@ -108,11 +119,12 @@ inputFile = new File(System.getProperty("user.dir")+"\\combined\\Combined_lookup
 	           System.out.println(me2.getValue());
 	           csvBody.get(0)[j]=me2.getValue().toString();
 	           
-	           dis=dis+me2.getValue()+",";
+	           dis=dis+me2.getValue().toString().toUpperCase()+",";
 	           num=num+me2.getKey()+",";
 	           
 	      }	
 		dis=dis+"Daily Total";
+		//num=num+"Daily Total";
 		String outputFile = System.getProperty("user.dir")+"\\combined\\template.csv";
 		
 		 // specified by filepath 
@@ -635,6 +647,31 @@ inputFile = new File(System.getProperty("user.dir")+"\\combined\\Combined_lookup
 	    } 
 		
 		
+	    inputFile = new File(destination);
+		//System.out.println("csvBody.size()"+csvBody.size());
+		//System.out.println("csvBody.get(1)"+csvBody.get(1).length);
+		// Read existing file
+		reader = new CSVReader(new FileReader(inputFile), ',');
+		csvBody = reader.readAll();
+		for(int i=0; i<csvBody.size(); i++){
+			strArray = csvBody.get(i);
+			
+		
+			for(int j=0; j<strArray.length; j++){
+				
+				if(csvBody.get(i)[j].equals("0")){
+					csvBody.get(i)[j]="-";
+				}
+			}
+		}
+		
+		reader.close();
+		
+		// Write to CSV file which is open
+		writer = new CSVWriter(new FileWriter(destination), ',');
+		writer.writeAll(csvBody);
+		writer.flush();
+		writer.close(); 
 		
 		
 		
@@ -644,8 +681,7 @@ inputFile = new File(System.getProperty("user.dir")+"\\combined\\Combined_lookup
 		
 		
 		
-		
-		
+	    JOptionPane.showMessageDialog(null, "Script run successfully. Report Location : "+System.getProperty("user.dir")+"\\combined\\template.csv");	
 		
 		
 		

@@ -392,7 +392,31 @@ public class total {
 			writer.flush();
 			writer.close(); 
 			
-	
+			inputFile = new File(filename);
+			//System.out.println("csvBody.size()"+csvBody.size());
+			//System.out.println("csvBody.get(1)"+csvBody.get(1).length);
+			// Read existing file
+			reader = new CSVReader(new FileReader(inputFile), ',');
+			csvBody = reader.readAll();
+			for(int i=0; i<csvBody.size(); i++){
+				strArray = csvBody.get(i);
+				
+			
+				for(int j=0; j<strArray.length; j++){
+					
+					if(csvBody.get(i)[j].equals("0")){
+						csvBody.get(i)[j]="-";
+					}
+				}
+			}
+			
+			reader.close();
+
+			// Write to CSV file which is open
+			writer = new CSVWriter(new FileWriter(filename), ',');
+			writer.writeAll(csvBody);
+			writer.flush();
+			writer.close(); 
 
 System.out.println("completed");
 //JOptionPane.showMessageDialog(null, goodresult+"\n"+"------------------------------------\n"+badresult);

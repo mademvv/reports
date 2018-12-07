@@ -88,7 +88,7 @@ public class convert_xlsx_csv {
                 }
         }
        // public static void main(String[] args) {
-        	 public static void change(String timestamp) {
+        	 public static void change( ) {
                 
         	File folder = new File(System.getProperty("user.dir")+"\\raw_data\\");
         	File[] listOfFiles = folder.listFiles();
@@ -98,15 +98,15 @@ public class convert_xlsx_csv {
         	    //System.out.println("File " + listOfFiles[i].getName());
         	    if(listOfFiles[i].getName().indexOf("report1")>-1){
         	    	 File inputFile = new File(System.getProperty("user.dir")+"\\raw_data\\"+listOfFiles[i].getName());
-                     File outputFile = new File(System.getProperty("user.dir")+"\\report1\\"+listOfFiles[i].getName().substring(0, listOfFiles[i].getName().length()-5)+"_"+timestamp+".csv");
+                     File outputFile = new File(System.getProperty("user.dir")+"\\report1\\"+listOfFiles[i].getName().substring(0, listOfFiles[i].getName().length()-5)+".csv");
                      xlsx(inputFile, outputFile);
         	    }else if(listOfFiles[i].getName().indexOf("report2")>-1){
         	    	 File inputFile = new File(System.getProperty("user.dir")+"\\raw_data\\"+listOfFiles[i].getName());
-                     File outputFile = new File(System.getProperty("user.dir")+"\\report2\\"+listOfFiles[i].getName().substring(0, listOfFiles[i].getName().length()-5)+"_"+timestamp+".csv");
+                     File outputFile = new File(System.getProperty("user.dir")+"\\report2\\"+listOfFiles[i].getName().substring(0, listOfFiles[i].getName().length()-5)+".csv");
                      xlsx(inputFile, outputFile);      	    	     	    	
-        	    }else if(listOfFiles[i].getName().indexOf("combined")>-1){
+        	    }else if(listOfFiles[i].getName().indexOf("Combined")>-1){
         	    	 File inputFile = new File(System.getProperty("user.dir")+"\\raw_data\\"+listOfFiles[i].getName());
-                     File outputFile = new File(System.getProperty("user.dir")+"\\combined\\"+listOfFiles[i].getName().substring(0, listOfFiles[i].getName().length()-5)+"_"+timestamp+".csv");
+                     File outputFile = new File(System.getProperty("user.dir")+"\\combined\\"+listOfFiles[i].getName().substring(0, listOfFiles[i].getName().length()-5)+".csv");
                      xlsx(inputFile, outputFile); 
         	    }
         	  }

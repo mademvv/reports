@@ -20,6 +20,8 @@ import javax.swing.JTextArea;
 import com.opencsv.CSVReader;
 import com.opencsv.CSVWriter;
 
+import combined.markup;
+
 
 public class report2 {
 	public static CSVReader reader;
@@ -152,7 +154,7 @@ public static boolean dg=false;
 	            //System.out.println("----------------------------"); 
 	        } 
 	        
-	        inputFile = new File(System.getProperty("user.dir")+"\\report2_reports\\report2_KPI Daily Leads.csv");
+	        inputFile = new File(System.getProperty("user.dir")+"\\report2_reports\\report2_KPI_Daily_Leads.csv");
 
 			// Read existing file
 			 reader = new CSVReader(new FileReader(inputFile), ',');
@@ -160,7 +162,7 @@ public static boolean dg=false;
 		for( i=0; i<csvBody.size(); i++){
 			String[] strArray = csvBody.get(i);
 			//col_index=0;
-			for( j=0; j<strArray.length; j++){
+			for( j=0; j<strArray.length-1; j++){
 				if(i>=2 && j>0){
 				csvBody.get(i)[j]="0";
 				}
@@ -170,30 +172,28 @@ public static boolean dg=false;
 		//reader.close();
 
 		// Write to CSV file which is open
-		writer = new CSVWriter(new FileWriter(System.getProperty("user.dir")+"\\report2_reports\\report2_KPI Daily Leads.csv"), ',');
+		writer = new CSVWriter(new FileWriter(System.getProperty("user.dir")+"\\report2_reports\\report2_KPI_Daily_Leads.csv"), ',');
 		writer.writeAll(csvBody);
 		writer.flush();
 		writer.close();  
 	        
 	        
 	        
-	        for(int dt=0;xyz.length>dt;dt++){
+	       /* for(int dt=0;xyz.length>dt;dt++){
 	        	for(int s=0;xyz[0].length>s;s++){
 	        		System.out.print("xyz["+dt+"]["+s+"]"+xyz[dt][s]);
-	        		if(xyz[dt][s].equals("Kim Fincher Pritchard")){
-	        			System.out.println("hi");
-	        		}
+	        		
 	        	}
 	        	System.out.println();
-	        }
+	        }*/
 	        
 	        for(int g=0;xyz.length>g;g++){
 	        	//for(int y=0;xyz[0].length>y;y++){
 	        		 dg=false;
 	        		//if(xyz[g][]!=null){
-	        			if(xyz[g][2].equals("Lisa Giuliano")){
+	        			/*if(xyz[g][2].equals("Lisa Giuliano")){
 	        				System.out.println("hi");
-	        			}
+	        			}*/
 	        			
 	        			String val=xyz[g][1];
 	    				 distributor=xyz[g][2];
@@ -204,7 +204,7 @@ public static boolean dg=false;
 	    						count=0;
 	    						System.out.println("var[1]@@@@@@@@@@@@"+var[1]);
 	    						boolean ft=false;
-	    						inputFile = new File(System.getProperty("user.dir")+"\\report2_reports\\report2_KPI Daily Leads.csv");
+	    						inputFile = new File(System.getProperty("user.dir")+"\\report2_reports\\report2_KPI_Daily_Leads.csv");
 
 	    						// Read existing file
 	    						reader = new CSVReader(new FileReader(inputFile), ',');
@@ -296,7 +296,7 @@ public static boolean dg=false;
 	    								//csvBody.get(row_index)[rt]=String.valueOf(Integer.parseInt(csvBody.get(row_index)[rt]+Integer.parseInt(x)));
 	    								dg=true;
 	    							}
-	    							 writer = new CSVWriter(new FileWriter(System.getProperty("user.dir")+"\\report2_reports\\report2_KPI Daily Leads.csv"), ',');
+	    							 writer = new CSVWriter(new FileWriter(System.getProperty("user.dir")+"\\report2_reports\\report2_KPI_Daily_Leads.csv"), ',');
 	    								writer.writeAll(csvBody);
 	    								writer.flush();
 	    								writer.close();
@@ -352,28 +352,58 @@ public static boolean dg=false;
 			unfound.addAll(h);
 			String cg="";
 			for(int w=0;found.size()>w;w++){
-				cg+=(w+1)+" "+found.get(w)+"\n";
+				cg+=found.get(w)+"\n";
 			}
 
 			String fg="";
 			for(int w=0;unfound.size()>w;w++){
-				fg+=(w+1)+" "+unfound.get(w)+"\n";
+				fg+=unfound.get(w)+"\n";
 			}
 			
 			
 			
 			
-			inputFile = new File(System.getProperty("user.dir")+"\\report2_reports\\report2_KPI Daily Leads.csv");
-
+			inputFile = new File(System.getProperty("user.dir")+"\\report2_reports\\report2_KPI_Daily_Leads.csv");
+			//System.out.println("csvBody.size()"+csvBody.size());
+			//System.out.println("csvBody.get(1)"+csvBody.get(1).length);
 			// Read existing file
 			reader = new CSVReader(new FileReader(inputFile), ',');
+			csvBody = reader.readAll();
+			for( i=0; i<csvBody.size(); i++){
+				strArray = csvBody.get(i);
+				
+			
+				for( j=0; j<strArray.length; j++){
+					
+					if(csvBody.get(i)[j].equals("-")){
+						csvBody.get(i)[j]="0";
+					}
+				}
+			}
+			
+			reader.close();
+
+			// Write to CSV file which is open
+			writer = new CSVWriter(new FileWriter(System.getProperty("user.dir")+"\\report2_reports\\report2_KPI_Daily_Leads.csv"), ',');
+			writer.writeAll(csvBody);
+			writer.flush();
+			writer.close();
+			
+			inputFile = new File(System.getProperty("user.dir")+"\\report2_reports\\report2_KPI_Daily_Leads.csv");
+
+			// Read existing file
+			/*reader = new CSVReader(new FileReader(inputFile), ',');
 			csvBody = reader.readAll();
 			 strArray = csvBody.get(0);
 			 System.out.println("strArray.length"+strArray.length);
 			 dim_array=new String[31][strArray.length];
+			 */
+		String	source=System.getProperty("user.dir")+"\\report2\\report2_Lead_Origination_Daily.csv";
+		String	destination=System.getProperty("user.dir")+"\\report2_reports\\report2_KPI_Daily_Leads.csv";
+			 markup.manipulation(source,destination);
 			 
 	
-			inputFile = new File(System.getProperty("user.dir")+"\\report2_reports\\report2_KPI Daily Leads.csv");
+			/*inputFile = new File(System.getProperty("user.dir")+"\\report2_reports\\report2_KPI_Daily_Leads.csv");
 
 			// Read existing file
 			reader = new CSVReader(new FileReader(inputFile), ',');
@@ -457,15 +487,15 @@ public static boolean dg=false;
 			reader.close();
 		//	System.out.println(dim_array.length);
 		//	System.out.println(dim_array[1].length);
-				/*for(int x=0;dim_array.length>x;x++){
+				for(int x=0;dim_array.length>x;x++){
 					for(int rf=0;dim_array[x].length>rf;rf++){
 						System.out.print("dim_array["+x+"]["+rf+"]"+dim_array[x][rf]);
 					}
 					System.out.println();
-				}*/
+				}
 			
 			String[][] subtotal;
-			
+			strArray = csvBody.get(1);
 			if((dim_array.length)%5==0){
 				subtotal=new String[6][strArray.length];
 			}else{
@@ -596,7 +626,7 @@ public static boolean dg=false;
 
 				}
 				//System.out.println("er"+er);
-				subtotal[i][subtotal[1].length-2]=String.valueOf(er);
+				subtotal[i][subtotal[0].length-2]=String.valueOf(er);
 				//System.out.println("");
 			}
 			
@@ -605,7 +635,7 @@ public static boolean dg=false;
 			int day_count=31;  
 
 
-			inputFile = new File(System.getProperty("user.dir")+"\\report2_reports\\report2_KPI Daily Leads.csv");
+			inputFile = new File(System.getProperty("user.dir")+"\\report2_reports\\report2_KPI_Daily_Leads.csv");
 			//System.out.println("csvBody.size()"+csvBody.size());
 			//System.out.println("csvBody.get(1)"+csvBody.get(1).length);
 			// Read existing file
@@ -621,12 +651,12 @@ public static boolean dg=false;
 			
 			//System.out.println(dim_array.length);
 			//System.out.println(dim_array[1].length);
-				/*for(int x=0;dim_array.length>x;x++){
+				for(int x=0;dim_array.length>x;x++){
 					for(int rf=0;dim_array[x].length>rf;rf++){
 						System.out.print("dim_array["+x+"]["+rf+"]"+dim_array[x][rf]);
 					}
 					System.out.println();
-				}*/
+				}
 				
 			
 			for( i=0; i<csvBody.size(); i++){
@@ -672,12 +702,25 @@ public static boolean dg=false;
 			reader.close();
 
 			// Write to CSV file which is open
-			writer = new CSVWriter(new FileWriter(System.getProperty("user.dir")+"\\report2_reports\\report2_KPI Daily Leads.csv"), ',');
+			writer = new CSVWriter(new FileWriter(System.getProperty("user.dir")+"\\report2_reports\\report2_KPI_Daily_Leads.csv"), ',');
 			writer.writeAll(csvBody);
 			writer.flush();
 			writer.close(); 
 			
-			inputFile = new File(System.getProperty("user.dir")+"\\report2_reports\\report2_KPI Daily Leads.csv");
+			
+			
+			
+			System.out.println(subtotal.length);
+			System.out.println();
+			for(int fe=0;subtotal.length>fe;fe++){
+			
+			for(int dq=0;subtotal[fe].length>dq;dq++){
+				System.out.print(dq+"Value"+subtotal[fe][dq]+"|");
+			}
+			System.out.println();
+		}
+			
+			inputFile = new File(System.getProperty("user.dir")+"\\report2_reports\\report2_KPI_Daily_Leads.csv");
 			//System.out.println("csvBody.size()"+csvBody.size());
 			//System.out.println("csvBody.get(1)"+csvBody.get(1).length);
 			// Read existing file
@@ -692,7 +735,7 @@ public static boolean dg=false;
 				//col_index=0;
 				int hr=0;stk=false;str=false;
 			
-				for( j=0; j<strArray.length; j++){
+				for( j=0; j<strArray.length-1; j++){
 					stk=false;
 					if(ke==32){
 						break;
@@ -732,24 +775,43 @@ public static boolean dg=false;
 			reader.close();
 
 			// Write to CSV file which is open
-			writer = new CSVWriter(new FileWriter(System.getProperty("user.dir")+"\\report2_reports\\report2_KPI Daily Leads.csv"), ',');
+			writer = new CSVWriter(new FileWriter(System.getProperty("user.dir")+"\\report2_reports\\report2_KPI_Daily_Leads.csv"), ',');
 			writer.writeAll(csvBody);
 			writer.flush();
 			writer.close(); 
 			
+			inputFile = new File(System.getProperty("user.dir")+"\\report2_reports\\report2_KPI_Daily_Leads.csv");
+			//System.out.println("csvBody.size()"+csvBody.size());
+			//System.out.println("csvBody.get(1)"+csvBody.get(1).length);
+			// Read existing file
+			reader = new CSVReader(new FileReader(inputFile), ',');
+			csvBody = reader.readAll();
+			for( i=0; i<csvBody.size(); i++){
+				strArray = csvBody.get(i);
+				
 			
-			JTextArea te=new JTextArea("Report Location:\n"+System.getProperty("user.dir")+"\\report2_reports\\report2_KPI Daily Leads.csv\n\n"+"UnFound List & NOT Updated :\n"+fg+"------------------------------------\n"+"Found List & Updated :\n"+cg);
+				for( j=0; j<strArray.length; j++){
+					
+					if(csvBody.get(i)[j].equals("0")){
+						csvBody.get(i)[j]="-";
+					}
+				}
+			}
+			
+			reader.close();
+*/
+			// Write to CSV file which is open
+			/*writer = new CSVWriter(new FileWriter(System.getProperty("user.dir")+"\\report2_reports\\report2_KPI_Daily_Leads.csv"), ',');
+			writer.writeAll(csvBody);
+			writer.flush();
+			writer.close();*/ 
+			JTextArea te=new JTextArea("Report Location:\n"+System.getProperty("user.dir")+"\\report2_reports\\report2_KPI_Daily_Leads.csv\n\n"+"UnFound List & NOT Updated :\n"+fg+"------------------------------------\n"+"Found List & Updated :\n"+cg);
 			JScrollPane sc= new JScrollPane(te);
 			te.setLineWrap(true);
 		
 			te.setWrapStyleWord(true);
 			sc.setPreferredSize(new Dimension(500,500));
 			JOptionPane.showMessageDialog(null, sc,"KPI Daily Lead Report2 Status",JOptionPane.YES_NO_OPTION);
-	
-			
-	
-	
-	
 	
 	} 
  
